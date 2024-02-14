@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MovieTime">
+	<insert id="mtRegister" parameterType="movietime">
+		INSERT INTO MOVIETIMET VALUES(MTT_SEQ.NEXTVAL, #{fmTitle}, #{thName}, #{scName}, #{mtDate}, #{mtTime}, 0)
+	</insert>
+	
+	<select id="mtCount" resultType="int">
+		SELECT COUNT(*) FROM MOVIETIMET
+	</select>
+	
+	<select id="mtList" parameterType="paging" resultType="movietime">
+		SELECT * FROM MOVIETIMELIST WHERE RN BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="mtSearch" parameterType="search" resultType="movietime">
+		SELECT * FROM MOVIETIMET WHERE ${category} LIKE '%${keyword}%'
+	</select>
+	
+	<select id="mtView" parameterType="int" resultType="movietime">
+		SELECT * FROM MOVIETIMET WHERE MTNO = #{mtNo}
+	</select>
+	
+	<delete id="mtDelete" parameterType="int">
+		DELETE FROM MOVIETIMET WHERE MTNO = #{mtNo}
+	</delete>
+</mapper>

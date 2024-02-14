@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Ticketing">
+	<select id="movieList" resultType="film">
+		SELECT * FROM FILMT
+	</select>
+		
+	<select id="theaterList" parameterType="String" resultType="movieTime">
+		SELECT THNAME FROM MOVIETIMET WHERE FMTITLE = #{fmTitle} GROUP BY THNAME
+	</select>
+	
+	<select id="mtDateList" parameterType="movieTime" resultType="movieTime">
+		SELECT MTDATE FROM MOVIETIMET WHERE FMTITLE = #{fmTitle} AND THNAME = #{thName} GROUP BY MTDATE
+	</select>
+	
+	<select id="mtListFinal" parameterType="movieTime" resultType="movieTime">
+		SELECT * FROM MOVIETIMET WHERE FMTITLE = #{fmTitle} AND THNAME = #{thName} AND MTDATE = #{mtDate}
+	</select>
+	
+	<select id="tkBookForm" parameterType="String" resultType="member">
+		SELECT * FROM MEMBERT WHERE MID = #{mId}
+	</select>
+	
+	<insert id="tkRegister" parameterType="ticketing">
+		INSERT INTO TICKETINGT VALUES(TK_SEQ.NEXTVAL, #{mId}, #{fmTitle}, #{thName}, #{mtDate}, #{scName}, #{mtTime}, #{mtCount})
+	</insert>
+	
+	<select id="tkView" parameterType="String" resultType="ticketing">
+		SELECT * FROM TICKETINGT WHERE MID = #{mId}
+	</select>
+	
+	<update id="mtCount" parameterType="ticketing">
+		UPDATE MOVIETIMET SET MTCOUNT = MTCOUNT + #{mtCount} WHERE MTNO = #{mtNo}
+	</update>
+	
+	<delete id="tkDelete" parameterType="int">
+		DELETE FROM TICKETINGT WHERE TKNO = #{tkNo}
+	</delete>
+	
+	<select id="tkCount" resultType="int">
+		SELECT COUNT(*) FROM TICKETINGT
+	</select>
+	
+	<select id="tkList" parameterType="paging" resultType="ticketing">
+		SELECT * FROM TICKETINGT
+	</select>
+	
+	<select id="tkSearch" parameterType="search" resultType="ticketing">
+		SELECT * FROM TICKETINGT WHERE ${category} LIKE '%${keyword}%'
+	</select>
+</mapper>
